@@ -27,7 +27,7 @@ ADDON_PATH     = (REAL_SETTINGS.getAddonInfo('path').decode('utf-8'))
 SETTINGS_LOC   = REAL_SETTINGS.getAddonInfo('profile').decode('utf-8')
 XSP_CACHE_LOC  = os.path.join(SETTINGS_LOC, 'cache','')
 MEDIA_EXTS     = (xbmc.getSupportedMedia('video')).split('|')
-ACTION_STOP    = 13
+ACTION_STOP    = [9, 10, 13, 92]
 
 class BackgroundWindow(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
@@ -36,10 +36,9 @@ class BackgroundWindow(xbmcgui.WindowXMLDialog):
         
         
     def onAction(self, act):
-        if REAL_SETTINGS.getSetting("LockAction") == 'true' and act.getId() != ACTION_STOP:
-            return
-        self.myPlayer.stop()        
-        self.close()
+        if REAL_SETTINGS.getSetting("LockAction") == 'false' and act.getId() in ACTION_STOP:
+            self.myPlayer.stop()        
+            self.close()
         
         
 class Player(xbmc.Player):
